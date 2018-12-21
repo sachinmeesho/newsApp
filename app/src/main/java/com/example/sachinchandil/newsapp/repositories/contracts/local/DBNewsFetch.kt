@@ -6,6 +6,6 @@ import javax.inject.Inject
 
 class DBNewsFetch @Inject constructor(private var localRepository: LocalRepository) :
     DBOperation<String, List<ArticlesItem>> {
-    override suspend fun execute(data: String): List<ArticlesItem> = localRepository.fetchHeadLines()
+    override fun execute(data: String): List<ArticlesItem> = localRepository.fetchHeadLines()
 
 }

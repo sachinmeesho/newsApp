@@ -6,7 +6,7 @@ import javax.inject.Inject
 
 class DBNewsStore @Inject constructor(private var localRepository: LocalRepository) :
     DBOperation<List<ArticlesItem>, Unit> {
-    override suspend fun execute(data: List<ArticlesItem>) {
+    override fun execute(data: List<ArticlesItem>) {
         localRepository.insertHeadLines(data)
     }
 

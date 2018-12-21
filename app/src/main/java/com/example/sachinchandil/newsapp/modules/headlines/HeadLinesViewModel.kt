@@ -6,36 +6,41 @@ import com.example.sachinchandil.newsapp.database.entities.ArticlesItem
 import com.example.sachinchandil.newsapp.repositories.contracts.local.DBNewsFetch
 import com.example.sachinchandil.newsapp.repositories.contracts.local.DBNewsStore
 import com.example.sachinchandil.newsapp.repositories.contracts.network.NewsFetch
+import com.example.sachinchandil.newsapp.utils.coroutines.ThreadDispatcher
 import com.meesho.supply.util.arch.viewstate.ViewEvent
 import com.meesho.supply.util.arch.viewstate.ViewState
-import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.net.SocketTimeoutException
 import javax.inject.Inject
 
 class HeadLinesViewModel @Inject constructor(
-    var newsFetch: NewsFetch, var dbNewsStore: DBNewsStore, var dbNewsFetch: DBNewsFetch
+    private var newsFetch: NewsFetch, private var dbNewsStore: DBNewsStore, private var dbNewsFetch: DBNewsFetch,
+    dispatcher: ThreadDispatcher
 ) :
-    BaseViewModel() {
+    BaseViewModel(dispatcher) {
 
     val viewState: MutableLiveData<ViewEvent<ViewState<List<ArticlesItem>>>> =
         MutableLiveData()
 
     fun fetchHeadLines() {
         scope.launch {
-            var articles = withContext(IO) {
+            var articles = withContext(dispatcher.IO) {
                 dbNewsFetch.execute("ind")
             }
             // Passing data from local cache to display in UI until new data is fetched.
             viewState.value = ViewEvent(ViewState(articles))
 
-            var response = withContext(IO) {
+            var response = withContext(dispatcher.IO) {
                 try {
                     val res = newsFetch.execute().await()
-                    if(res.articles.isNotEmpty()) {
-                        articles = res.articles.map { ArticlesItem(it.publishedAt, it.author, it.urlToImage,
-                            it.description, it.urlToImage, it.title, it.url, it.content) }
+                    if (res.articles.isNotEmpty()) {
+                        articles = res.articles.map {
+                            ArticlesItem(
+                                it.publishedAt, it.author, it.urlToImage,
+                                it.description, it.urlToImage, it.title, it.url, it.content
+                            )
+                        }
                         dbNewsStore.execute(articles)
                     }
                     res.articles
@@ -43,7 +48,7 @@ class HeadLinesViewModel @Inject constructor(
                     null
                 }
             }
-            if(response?.isNotEmpty() == true) {
+            if (response?.isNotEmpty() == true) {
                 viewState.value = ViewEvent(ViewState(articles))
             }
         }
