@@ -12,13 +12,19 @@ abstract class BaseActivity<T : BaseViewModel> : AppCompatActivity() {
     @Inject
     lateinit var mFactory: ViewModelProvider.Factory
 
-    protected lateinit var mViewModel: T
+    lateinit var mViewModel: T
 
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidInjection.inject(this)
         super.onCreate(savedInstanceState)
+        setContentView(getLayout())
         mViewModel = ViewModelProviders.of(this, mFactory)[getViewModelType()]
+        init()
+        setupEvents()
     }
 
     abstract fun getViewModelType(): Class<T>
+    abstract fun setupEvents()
+    abstract fun init()
+    abstract fun getLayout(): Int
 }

@@ -11,7 +11,7 @@ import javax.inject.Singleton
 @Singleton
 @Component(
     modules = [AndroidInjectionModule::class, ApiModule::class, RepositoryModule::class, ViewModelModule::class,
-        ActivityModule::class, DatabaseModule::class, CoroutineModule::class]
+        ActivityModule::class, DatabaseModule::class, CoroutineModule::class, UseCaseModule::class]
 )
 interface AppComponent {
 

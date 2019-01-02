@@ -5,4 +5,8 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="search">Search</string>
+    <string name="no_news_available">There are no news at the moment</string>
+    <string name="internet_error">Please check you internet connection.</string>
+    <string name="send_to">Send to</string>
 </resources>

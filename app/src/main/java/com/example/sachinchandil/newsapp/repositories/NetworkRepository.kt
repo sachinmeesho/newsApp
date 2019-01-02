@@ -6,5 +6,5 @@ import kotlinx.coroutines.Deferred
 
 class NetworkRepository(var newsApiService: NewsApiService) {
 
-    fun fetchNews(): Deferred<NewsResponse> = newsApiService.fetchNews("ind")
+    fun fetchNews(): Deferred<NewsResponse> = newsApiService.fetchNews("in")
 }

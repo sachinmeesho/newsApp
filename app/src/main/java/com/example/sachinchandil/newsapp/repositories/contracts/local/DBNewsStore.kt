@@ -5,7 +5,8 @@ import com.example.sachinchandil.newsapp.repositories.LocalRepository
 import javax.inject.Inject
 
 class DBNewsStore @Inject constructor(private var localRepository: LocalRepository) :
-    DBOperation<List<ArticlesItem>, Unit> {
+    DBOperation1<List<ArticlesItem>, Unit> {
+
     override fun execute(data: List<ArticlesItem>) {
         localRepository.insertHeadLines(data)
     }
